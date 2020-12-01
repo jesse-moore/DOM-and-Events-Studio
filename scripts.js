@@ -1,9 +1,9 @@
 // Write your JavaScript code here.
 // Remember to pay attention to page loading!
 
-window.addEventListener('load', setEventListeners)
+window.addEventListener('load', onLoadFunction)
 
-function setEventListeners() {
+function onLoadFunction() {
     document.getElementById('takeoff').addEventListener('click', confirmTakeoff)
     document.getElementById('landing').addEventListener('click', land)
     document
@@ -12,6 +12,7 @@ function setEventListeners() {
     document.querySelectorAll('button').forEach((e) => {
         e.addEventListener('click', moveRocket)
     })
+    document.getElementById('rocket').style.top = '250px'
 }
 
 function confirmTakeoff() {
@@ -30,6 +31,7 @@ function land() {
     window.alert('The shuttle is landing. Landing gear engaged.')
     document.getElementById('shuttleBackground').style.backgroundColor = 'green'
     document.getElementById('spaceShuttleHeight').innerText = 0
+    document.getElementById('rocket').style.top = '250px'
 }
 
 function abortMission() {
@@ -41,6 +43,7 @@ function abortMission() {
         document.getElementById('shuttleBackground').style.backgroundColor =
             'green'
         document.getElementById('spaceShuttleHeight').innerText = 0
+        document.getElementById('rocket').style.top = '250px'
     }
 }
 
@@ -50,27 +53,31 @@ function moveRocket({ target }) {
         document.getElementById('spaceShuttleHeight').innerText
     )
     const direction = target.innerText
-    let currentMovement = 0
+    let currentPosition = 0
     switch (direction) {
         case 'Up':
-            currentMovement = Number(rocket.style.top.replace('px', ''))
-            rocket.style.top = `${currentMovement - 10}px`
+            currentPosition = Number(rocket.style.top.replace('px', ''))
+            if (currentPosition <= 0) return
+            rocket.style.top = `${currentPosition - 10}px`
             document.getElementById('spaceShuttleHeight').innerText =
                 currentHeight + 10000
             break
         case 'Down':
-            currentMovement = Number(rocket.style.top.replace('px', ''))
-            rocket.style.top = `${currentMovement + 10}px`
+            currentPosition = Number(rocket.style.top.replace('px', ''))
+            if (currentPosition >= 250) return
+            rocket.style.top = `${currentPosition + 10}px`
             document.getElementById('spaceShuttleHeight').innerText =
                 currentHeight - 10000
             break
         case 'Left':
-            currentMovement = Number(rocket.style.left.replace('px', ''))
-            rocket.style.left = `${currentMovement - 10}px`
+            currentPosition = Number(rocket.style.left.replace('px', ''))
+            if (currentPosition <= -160) return
+            rocket.style.left = `${currentPosition - 10}px`
             break
         case 'Right':
-            currentMovement = Number(rocket.style.left.replace('px', ''))
-            rocket.style.left = `${currentMovement + 10}px`
+            currentPosition = Number(rocket.style.left.replace('px', ''))
+            if (currentPosition >= 160) return
+            rocket.style.left = `${currentPosition + 10}px`
             break
         default:
             break
